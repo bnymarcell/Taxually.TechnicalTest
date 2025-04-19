@@ -5,9 +5,9 @@ namespace Taxually.TechnicalTest.Handlers
 {
     public class BrittainVatHandler : IVatRegistrationHandler
     {
-        private readonly TaxuallyHttpClient _httpClient;
+        private readonly IHttpClient _httpClient;
 
-        public BrittainVatHandler(TaxuallyHttpClient httpClient)
+        public BrittainVatHandler(IHttpClient httpClient)
         {
             _httpClient = httpClient;
         }

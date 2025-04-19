@@ -1,6 +1,8 @@
-﻿namespace Taxually.TechnicalTest
+﻿using Taxually.TechnicalTest.Interfaces;
+
+namespace Taxually.TechnicalTest
 {
-    public class TaxuallyQueueClient
+    public class TaxuallyQueueClient : IQueueClient
     {
         public Task EnqueueAsync<TPayload>(string queueName, TPayload payload)
         {

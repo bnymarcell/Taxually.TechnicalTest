@@ -7,11 +7,11 @@ namespace Taxually.TechnicalTest.Handlers
 {
     public class GermanyVatHandler : IVatRegistrationHandler
     {
-        private TaxuallyQueueClient _queueClient;
+        private IQueueClient _queueClient;
         private XmlHelper _xmlHelper;
         public bool CanHandle(string countryCode) => countryCode == "DE";
 
-        public GermanyVatHandler(TaxuallyQueueClient queueClient, XmlHelper xmlHelper)
+        public GermanyVatHandler(IQueueClient queueClient, XmlHelper xmlHelper)
         {
             _queueClient = queueClient;
             _xmlHelper = xmlHelper;

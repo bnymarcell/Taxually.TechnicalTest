@@ -1,6 +1,8 @@
-﻿namespace Taxually.TechnicalTest
+﻿using Taxually.TechnicalTest.Interfaces;
+
+namespace Taxually.TechnicalTest
 {
-    public class TaxuallyHttpClient
+    public class TaxuallyHttpClient : IHttpClient
     {
         public Task PostAsync<TRequest>(string url, TRequest request)
         {

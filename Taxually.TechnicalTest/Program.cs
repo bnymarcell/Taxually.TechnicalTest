@@ -3,6 +3,7 @@ using Taxually.TechnicalTest;
 using Taxually.TechnicalTest.Handlers;
 using Taxually.TechnicalTest.Helpers;
 using Taxually.TechnicalTest.Interfaces;
+using Taxually.TechnicalTest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +16,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IVatRegistrationHandler, BrittainVatHandler>();
 builder.Services.AddScoped<IVatRegistrationHandler, FranceVatHandler>();
 builder.Services.AddScoped<IVatRegistrationHandler, GermanyVatHandler>();
-builder.Services.AddScoped<TaxuallyQueueClient>();
-builder.Services.AddScoped<TaxuallyHttpClient>();
+builder.Services.AddScoped<IVatRegistrationService, VatRegistrationService>();
+builder.Services.AddScoped<IQueueClient,TaxuallyQueueClient>();
+builder.Services.AddScoped<IHttpClient,TaxuallyHttpClient>();
 builder.Services.AddScoped<XmlHelper>();
 
 var app = builder.Build();

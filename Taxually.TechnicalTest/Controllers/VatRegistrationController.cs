@@ -15,24 +15,25 @@ namespace Taxually.TechnicalTest.Controllers
         /// <summary>
         /// Registers a company for a VAT number in a given country
         /// </summary>
-        private readonly IEnumerable<IVatRegistrationHandler> _handlers;
+        private readonly IVatRegistrationService _vatRegistrationService;
 
-        public VatRegistrationController(IEnumerable<IVatRegistrationHandler> handlers)
+        public VatRegistrationController(IVatRegistrationService vatRegistrationService)
         {
-            _handlers = handlers;
+            _vatRegistrationService = vatRegistrationService;
         }
 
         [HttpPost]
         public async Task<IActionResult> RegisterVat([FromBody]VatRegistrationRequest request)
         {
-            var handler = _handlers.FirstOrDefault(h => h.CanHandle(request.Country));
-            if (handler == null)
+            try
+            {
+                await _vatRegistrationService.RegisterAsync(request);
+                return Ok();
+            }
+            catch (InvalidOperationException)
             {
                 return BadRequest("Input was incorrect");
             }
-
-            await handler.HandleAsync(request);
-           return Ok();
         }
     }
 

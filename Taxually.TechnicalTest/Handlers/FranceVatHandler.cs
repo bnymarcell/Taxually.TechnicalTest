@@ -6,10 +6,11 @@ namespace Taxually.TechnicalTest.Handlers
 {
     public class FranceVatHandler : IVatRegistrationHandler
     {
-        private readonly TaxuallyQueueClient _queueClient;
+        private readonly IQueueClient _queueClient;
+       
         public bool CanHandle(string countryCode) => countryCode == "FR";
 
-        public FranceVatHandler(TaxuallyQueueClient queueClient)
+        public FranceVatHandler(IQueueClient queueClient)
         {
             _queueClient = queueClient;
         }
