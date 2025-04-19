@@ -5,11 +5,17 @@ namespace Taxually.TechnicalTest.Handlers
 {
     public class BrittainVatHandler : IVatRegistrationHandler
     {
+        private readonly TaxuallyHttpClient _httpClient;
+
+        public BrittainVatHandler(TaxuallyHttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
         public bool CanHandle(string countryCode) => countryCode == "GB";
 
         public async Task HandleAsync(VatRegistrationRequest request)
         {
-            var httpClient = new TaxuallyHttpClient();
+            var httpClient = _httpClient;
             await httpClient.PostAsync("https://api.uktax.gov.uk", request);
         }
 

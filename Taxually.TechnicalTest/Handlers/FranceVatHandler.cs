@@ -6,7 +6,13 @@ namespace Taxually.TechnicalTest.Handlers
 {
     public class FranceVatHandler : IVatRegistrationHandler
     {
+        private readonly TaxuallyQueueClient _queueClient;
         public bool CanHandle(string countryCode) => countryCode == "FR";
+
+        public FranceVatHandler(TaxuallyQueueClient queueClient)
+        {
+            _queueClient = queueClient;
+        }
 
         public async Task HandleAsync(VatRegistrationRequest request)
         {
@@ -15,9 +21,8 @@ namespace Taxually.TechnicalTest.Handlers
             csvBuilder.AppendLine("CompanyName,CompanyId");
             csvBuilder.AppendLine($"{request.CompanyName}{request.CompanyId}");
             var csv = Encoding.UTF8.GetBytes(csvBuilder.ToString());
-            var excelQueueClient = new TaxuallyQueueClient();
             // Queue file to be processed
-            await excelQueueClient.EnqueueAsync("vat-registration-csv", csv);
+            await _queueClient.EnqueueAsync("vat-registration-csv", csv);
         }
         
     }
