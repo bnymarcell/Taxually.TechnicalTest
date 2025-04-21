@@ -42,6 +42,34 @@ namespace Taxually.TechnicalTest.Tests
             await Assert.ThrowsAsync<InvalidOperationException>(() => service.RegisterAsync(request));
         }
 
+        [Fact]
+        public async Task RegisterAsync_ShouldCallOnlyMatchinHandler()
+        {
+            var mockFrance = new Mock<IVatRegistrationHandler>();
+            var mockBrittain = new Mock<IVatRegistrationHandler>();
 
+            mockFrance.Setup(h => h.CanHandle("FR")).Returns(true);
+            mockFrance.Setup(h => h.HandleAsync(It.IsAny<VatRegistrationRequest>())).Returns(Task.CompletedTask);
+
+            mockBrittain.Setup(h => h.CanHandle("FR")).Returns(false);
+
+            var service = new VatRegistrationService(new[] { mockFrance.Object, mockBrittain.Object });
+
+            var request = new VatRegistrationRequest { Country = "FR" };
+
+            await service.RegisterAsync(request);
+
+            mockFrance.Verify(h => h.HandleAsync(request), Times.Once);
+
+            mockBrittain.Verify(h => h.HandleAsync(It.IsAny<VatRegistrationRequest>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task RegisterAsync_ShouldThrowWhenRequestIsNull()
+        {
+            var service = new VatRegistrationService(new List<IVatRegistrationHandler>());
+
+            await Assert.ThrowsAsync <InvalidOperationException>(() => service.RegisterAsync(null));
+        }
     }
 }
